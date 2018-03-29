@@ -14,9 +14,10 @@ parser = argparse.ArgumentParser()
 # parser.add_argument('-f', '--folds_dir', help="folds directory (e.g. folds/gold")
 requiredNamed = parser.add_argument_group('required named arguments')
 requiredNamed.add_argument('-i', '--input', help='Input file name', required=True)
+requiredNamed.add_argument('-o', '--output', help='Output file name', required=True)
 args = parser.parse_args()
 
-class template:
+class Prep:
     def __init__(self):
         ### HELPER FUNCTIONS ###
         self.pprint = lambda y: [print(x) for x in y]
@@ -24,6 +25,7 @@ class template:
         self.get_head = lambda x: x.split('\t')[6]
         self.get_dep = lambda x: x.split('\t')[0]
         self.get_deps = lambda x, y: [z for z in y if self.get_head(z) == self.get_dep(x)]
+        self.tree2str = lambda tree: str(tree).replace('\\n', '').replace("'", "").replace('\\t', ' ').replace('_,', '_').replace("[", '( ').replace("]", " )") + '\n'
 
     def sep(self, lines):
         sents = []
@@ -38,11 +40,17 @@ class template:
             sents.append(sent)
         return sents
 
-    def ptree(self, tree):
-        start = ''
-        for dep in tree:
-            if type(dep[0]) == str:
-                print(dep[0])
+    def split_stuff(self, sents):
+        newsents = []
+        for line in sents:
+            line = line.split('\t')
+            if len(line) > 1:
+                # grammar
+                line[5] = line[5].replace('|', '')
+                # char level words
+                line[1] = ' '.join(line[1])
+            newsents.append('\t'.join(line))
+        return newsents
 
     def tree_it(self, root, sent):
         head = root[0]
@@ -55,7 +63,7 @@ class template:
             for d in deps:
                 d = [d]
                 d = self.tree_it(d, sent)
-                root.append(d)
+                root.append([d])
             return root
 
     def find_root(self, sent):
@@ -67,17 +75,25 @@ class template:
     def build_hier(self, sent):
         root, sent = self.find_root(sent)
         tree = self.tree_it(root, sent)
-        pdb.set_trace()
+        return tree
 
     def load_file(self, _file):
         data = open(_file, 'r').readlines()
-        sents = self.sep(data)
-        for s in sents:
-            self.build_hier(s)
+        return data
 
     def main(self):
-        self.load_file(args.input)
+        data = self.load_file(args.input)
+        data = self.split_stuff(data)
+        sents = self.sep(data)
+        done = 0
+        of = open(args.output, 'w')
+        for s in sents:
+            if s != []:
+                tree = self.build_hier(s)
+                done += 1
+                of.write(self.tree2str(tree))
+        print("Processed", done, "sentences")
 
 if __name__ == '__main__':
-    t = template()
-    t.main()
+    p = Prep()
+    p.main()
