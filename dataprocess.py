@@ -17,6 +17,9 @@ requiredNamed.add_argument('-i', '--input', help='Input file name', required=Tru
 requiredNamed.add_argument('-o', '--output', help='Output file name', required=True)
 args = parser.parse_args()
 
+# Character or word level?
+char = True
+
 class Prep:
     def __init__(self):
         ### HELPER FUNCTIONS ###
@@ -25,7 +28,7 @@ class Prep:
         self.get_head = lambda x: x.split('\t')[6]
         self.get_dep = lambda x: x.split('\t')[0]
         self.get_deps = lambda x, y: [z for z in y if self.get_head(z) == self.get_dep(x)]
-        self.tree2str = lambda tree: str(tree).replace('\\n', '').replace("'", "").replace('\\t', ' ').replace('_,', '_').replace("[", '( ').replace("]", " )") + '\n'
+        self.tree2str = lambda tree: str(tree).replace('\\n', '').replace("'", "").replace('\\t', ' ').replace('_,', '_').replace("[", '( ').replace("]", " )").strip() + '\n'
 
     def sep(self, lines):
         sents = []
@@ -36,8 +39,9 @@ class Prep:
             else:
                 sents.append(sent)
                 sent = []
-        if sent != []:
-            sents.append(sent)
+        # double check that we're getting everything
+        # if sent != []:
+        #     sents.append(sent)
         return sents
 
     def split_stuff(self, sents):
@@ -46,9 +50,10 @@ class Prep:
             line = line.split('\t')
             if len(line) > 1:
                 # grammar
-                line[5] = line[5].replace('|', '')
+                line[5] = line[5].replace('|', ' ')
                 # char level words
-                line[1] = ' '.join(line[1])
+                if char:
+                    line[1] = ' '.join(line[1])
             newsents.append('\t'.join(line))
         return newsents
 
@@ -91,6 +96,9 @@ class Prep:
             if s != []:
                 tree = self.build_hier(s)
                 done += 1
+                tree = self.tree2str(tree)
+                if tree[-2:] == '\n\n':
+                    pdb.set_trace()
                 of.write(self.tree2str(tree))
         print("Processed", done, "sentences")
 
