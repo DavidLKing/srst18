@@ -38,12 +38,14 @@ class Prep:
         outfile = open(args.output, 'w')
         done = 0
         for line in data:
-            line = line.strip()
-            line = word_tokenize(line)
-            line = '@'.join(line)
-            line = ' '.join(line)
-            outfile.write(line + '\n')
-            done += 1
+            if line.startswith('# text'):
+                line = line[8:]
+                line = line.strip()
+                line = word_tokenize(line)
+                line = '@'.join(line)
+                line = ' '.join(line)
+                outfile.write(line + '\n')
+                done += 1
         print("Processed", done, "sentences")
 
 if __name__ == '__main__':
