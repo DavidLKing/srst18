@@ -18,7 +18,8 @@ requiredNamed.add_argument('-o', '--output', help='Output file name', required=T
 args = parser.parse_args()
 
 # Character or word level?
-char = True
+# char = True
+char = False
 
 class Prep:
     def __init__(self):
@@ -28,7 +29,18 @@ class Prep:
         self.get_head = lambda x: x.split('\t')[6]
         self.get_dep = lambda x: x.split('\t')[0]
         self.get_deps = lambda x, y: [z for z in y if self.get_head(z) == self.get_dep(x)]
-        self.tree2str = lambda tree: str(tree).replace('\\n', '').replace("'", "").replace('\\t', ' ').replace('_,', '_').replace("[", '( ').replace("]", " )").strip() + '\n'
+        self.tree2str = lambda tree: '{0}\n'.format(str(tree).replace(
+            '\\n', '').replace(
+            "'", "").replace(
+            '\\t', ' ').replace(
+            "_,", '_').replace(
+            "[", '( ').replace(
+            "]", " )").replace(
+            "),", ')').strip())
+            #.replace(
+            # '_', '').replace(
+            # "  ", ' ').replace(
+            # "   ", ' ')
 
     def sep(self, lines):
         sents = []
@@ -54,6 +66,7 @@ class Prep:
                 # char level words
                 if char:
                     line[1] = ' '.join(line[1])
+                # pdb.set_trace()
             newsents.append('\t'.join(line))
         return newsents
 
@@ -97,8 +110,8 @@ class Prep:
                 tree = self.build_hier(s)
                 done += 1
                 tree = self.tree2str(tree)
-                if tree[-2:] == '\n\n':
-                    pdb.set_trace()
+                # if tree[-2:] == '\n\n':
+                # pdb.set_trace()
                 of.write(self.tree2str(tree))
         print("Processed", done, "sentences")
 

@@ -20,7 +20,8 @@ requiredNamed.add_argument('-o', '--output', help='Output file name', required=T
 args = parser.parse_args()
 
 # Character or word level?
-char = True
+# char = True
+char = False
 
 class Prep:
     def __init__(self):
