@@ -12,6 +12,8 @@ todo:
 
 [Currently trained LSTM LM models](https://dlk.sdf.org/models.tar.xz)
 
+[Current menagerie of data](https://dlk.sdf.org/data.tar.xz)
+
 #### LSTM Documentation ####
 Originally from [my fork of some pytorch examples](https://github.com/DavidLKing/examples).
 # Word-level language modeling RNN
