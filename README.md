@@ -55,16 +55,19 @@ optional arguments:
   --cuda             use CUDA
   --log-interval N   report interval
   --save SAVE        path to save the final model
+  --train 0/1        train the model (0 = eval, 1 = train)
+  --load LOAD        load a previously trained model
+  --rank RANK        output scores for every line in the test file (results.tsv)
 ```
 
 With these arguments, a variety of models can be tested.
 As an example, the following arguments produce slower but better models:
 
 ```bash
-python main.py --cuda --emsize 650 --nhid 650 --dropout 0.5 --epochs 40           # Test perplexity of 80.97
-python main.py --cuda --emsize 650 --nhid 650 --dropout 0.5 --epochs 40 --tied    # Test perplexity of 75.96
-python main.py --cuda --emsize 1500 --nhid 1500 --dropout 0.65 --epochs 40        # Test perplexity of 77.42
-python main.py --cuda --emsize 1500 --nhid 1500 --dropout 0.65 --epochs 40 --tied # Test perplexity of 72.30
+python main.py --cuda --emsize 650 --nhid 650 --dropout 0.5 --epochs 40 --train 1           # Test perplexity of 80.97
+python main.py --cuda --emsize 650 --nhid 650 --dropout 0.5 --epochs 40 --tied --train 1    # Test perplexity of 75.96
+python main.py --cuda --emsize 1500 --nhid 1500 --dropout 0.65 --epochs 40 --train 1        # Test perplexity of 77.42
+python main.py --cuda --emsize 1500 --nhid 1500 --dropout 0.65 --epochs 40 --tied --train 1 # Test perplexity of 72.30
 ```
 
 Perplexities on PTB are equal or better than
