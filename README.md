@@ -8,7 +8,7 @@ todo:
 - Change the LSTM to handle UNKs and remove the preprocessing step in beamsearch.py
 
 
-[Data url](http://taln.upf.edu/pages/msr2018-ws/Final4.zip)
+[Shared task data](http://taln.upf.edu/pages/msr2018-ws/Final4.zip)
 
 [Currently trained LSTM LM models](https://dlk.sdf.org/models.tar.xz)
 
