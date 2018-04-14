@@ -10,7 +10,7 @@ todo:
 
 [Data url](http://taln.upf.edu/pages/msr2018-ws/Final4.zip)
 
-[Currently training LSTM LM models](https://dlk.sdf.org/models.tar.xz)
+[Currently trained LSTM LM models](https://dlk.sdf.org/models.tar.xz)
 
 #### LSTM Documentation ####
 Originally from [my fork of some pytorch examples](https://github.com/DavidLKing/examples).
