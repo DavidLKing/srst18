@@ -8,6 +8,7 @@ todo:
 - [ ] clean up beam_search.py --- cancelled
 - [ ] Change the LSTM to handle UNKs and remove the preprocessing step in beamsearch.py---cancelled
 
+[Slack chat](https://srst18.slack.com/)
 
 [Shared task data](http://taln.upf.edu/pages/msr2018-ws/Final4.zip)
 
