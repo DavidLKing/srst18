@@ -2,10 +2,11 @@
 Our tinkerings
 
 todo:
-- redo morph feature set
-- clean up beam_search.py
-- Rerun Open NLP tests
-- Change the LSTM to handle UNKs and remove the preprocessing step in beamsearch.py
+- [x] redo morph feature set
+- [ ] Rerun Open NLP tests
+- [ ] Run AMR tests
+- [ ] clean up beam_search.py --- cancelled
+- [ ] Change the LSTM to handle UNKs and remove the preprocessing step in beamsearch.py---cancelled
 
 
 [Shared task data](http://taln.upf.edu/pages/msr2018-ws/Final4.zip)
