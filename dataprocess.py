@@ -70,7 +70,7 @@ class Prep:
             newsents.append('\t'.join(line))
         return newsents
 
-    def tree_it(self, root, sent):
+    def tree_it(self, root, sent, feats):
         head = root[0]
         if self.get_deps(head, sent) == []:
             return head
@@ -81,8 +81,14 @@ class Prep:
             for d in deps:
                 d = [d]
                 d = self.tree_it(d, sent)
+                d = self.conv_to_feats(d, feats)
                 root.append([d])
+                pdb.set_trace()
             return root
+
+    def conv_to_feats(self, line, feats):
+        line = line.split('\t')
+        pdb.set_trace()
 
     def find_root(self, sent):
         root = [x for x in sent if self.get_rel(x) == 'root']
@@ -90,28 +96,40 @@ class Prep:
         sent.pop(sent.index(root[0]))
         return root, sent
 
-    def build_hier(self, sent):
+    def build_hier(self, sent, feats):
         root, sent = self.find_root(sent)
-        tree = self.tree_it(root, sent)
+        tree = self.tree_it(root, sent, feats)
         return tree
 
     def load_file(self, _file):
         data = open(_file, 'r').readlines()
         return data
 
+    def build_feats(self, data):
+        allFeats = set()
+        for line in data:
+            line = line.split('\t')
+            if len(line) > 1:
+                feats = [line[3], line[4], line[7]]
+            for f in feats:
+                allFeats.add(f)
+        return allFeats
+
+
     def main(self):
         data = self.load_file(args.input)
         data = self.split_stuff(data)
+        self.feats = self.build_feats(data)
         sents = self.sep(data)
         done = 0
         of = open(args.output, 'w')
         for s in sents:
             if s != []:
-                tree = self.build_hier(s)
+                tree = self.build_hier(s, self.feats)
                 done += 1
                 tree = self.tree2str(tree)
                 # if tree[-2:] == '\n\n':
-                # pdb.set_trace()
+                pdb.set_trace()
                 of.write(self.tree2str(tree))
         print("Processed", done, "sentences")
 
