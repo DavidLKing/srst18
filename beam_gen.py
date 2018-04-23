@@ -11,10 +11,10 @@ import score
 # s = score.Score('./data/en-char')
 # model = s.load_model('./models/model.en.char.pt')
 # word level testing
-s = score.Score('./data/en-word')
-# s = score.Score('./data/en-char')
-model = s.load_model('./models/model.en.word.pt')
-# model = s.load_model('./models/model.en.char.pt')
+# s = score.Score('./data/en-word')
+s = score.Score('./data/en-char')
+# model = s.load_model('./models/model.en.word.pt')
+model = s.load_model('./models/model.en.char.pt')
 lstmscore = lambda cand: s.score_sent(cand, model)
 # formatting
 def lstmify(sent):
@@ -33,7 +33,7 @@ def characterize(sent):
     seq = seq.replace(' ', '@')
     seq = ' '.join(seq)
     seq = seq.replace('</s>', '<eos>')
-    pdb.set_trace()
+    # pdb.set_trace()
     return seq
 
 def unkify(sent, lang):
@@ -52,7 +52,7 @@ We want sents w/ minimal loss (common sequences)
 Once negative, the sorting and pull the max should be the same as pulling the min w/o changing 
 the rest of the code
 """
-charscore = lambda sent: -float(lstmscore(characterize(unkify(sent, s.data.dictionary.word2idx)))[0][0])
+charscore = lambda sent: -float(lstmscore(characterize(sent))[0][0])
 wordscore = lambda sent: -float(lstmscore(lstmify(unkify(sent, s.data.dictionary.word2idx)))[0][0])
 
 # a simple 2-gram precision scorer
@@ -182,8 +182,8 @@ def test(ref, log_steps=True):
         print('generating from ref:', ref)
     cs = bleu2_cand_scorer(ref)
     # gen = BeamGen(ref,cs,log_steps=log_steps)
-    # gen = BeamGen(ref,charscore,log_steps=log_steps)
-    gen = BeamGen(ref,wordscore,log_steps=log_steps)
+    gen = BeamGen(ref,charscore,log_steps=log_steps)
+    # gen = BeamGen(ref,wordscore,log_steps=log_steps)
     return gen.search()
     
 # run test as main

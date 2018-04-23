@@ -129,7 +129,6 @@ class Prep:
                 done += 1
                 tree = self.tree2str(tree)
                 # if tree[-2:] == '\n\n':
-                pdb.set_trace()
                 of.write(self.tree2str(tree))
         print("Processed", done, "sentences")
 
